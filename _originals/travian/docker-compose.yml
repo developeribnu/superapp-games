@@ -1,0 +1,186 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # DATABASE - MariaDB 10.6 (Optimized)
+  # ============================================
+  travian-db:
+    image: mariadb:10.6
+    container_name: travian-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: travianroot123
+      MYSQL_DATABASE: travian
+      MYSQL_USER: travian
+      MYSQL_PASSWORD: travian123
+      # Performance tuning
+      MYSQL_INITDB_SKIP_TZINFO: 1
+    command: >
+      mysqld
+      --innodb-buffer-pool-size=512M
+      --innodb-log-file-size=128M
+      --innodb-flush-log-at-trx-commit=2
+      --query-cache-type=1
+      --query-cache-size=64M
+      --max-connections=200
+      --thread-cache-size=50
+      --table-open-cache=400
+      --tmp-table-size=64M
+      --max-heap-table-size=64M
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - travian_mysql_data:/var/lib/mysql
+      - ./backups:/backups
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - travian-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ptravianroot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # REDIS CACHE SERVER
+  # ============================================
+  travian-redis:
+    image: redis:7-alpine
+    container_name: travian-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - travian_redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - travian-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ============================================
+  # WEB SERVER - PHP 7.4 + Apache (Optimized)
+  # ============================================
+  travian-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: travian-web
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+      - ./logs/apache:/var/log/apache2
+      - ./backups:/backups
+    ports:
+      - "8090:80"
+    depends_on:
+      travian-db:
+        condition: service_healthy
+      travian-redis:
+        condition: service_healthy
+    networks:
+      - travian-network
+    environment:
+      - DB_HOST=travian-db
+      - DB_NAME=travian
+      - DB_USER=travian
+      - DB_PASS=travian123
+      - REDIS_HOST=travian-redis
+      - REDIS_PORT=6379
+      - PHP_MEMORY_LIMIT=512M
+      - PHP_MAX_EXECUTION_TIME=300
+      - PHP_POST_MAX_SIZE=50M
+      - PHP_UPLOAD_MAX_FILESIZE=50M
+
+  # ============================================
+  # GAME AUTOMATION - Cron Job Runner
+  # ============================================
+  travian-cron:
+    build:
+      context: .
+      dockerfile: Dockerfile.cron
+    container_name: travian-cron
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+      - ./logs/cron:/var/log/cron
+      - ./scripts:/scripts
+    depends_on:
+      - travian-db
+      - travian-web
+      - travian-redis
+    networks:
+      - travian-network
+    environment:
+      - DB_HOST=travian-db
+      - DB_NAME=travian
+      - DB_USER=travian
+      - DB_PASS=travian123
+      - GAME_URL=http://travian-web
+
+  # ============================================
+  # EMAIL SERVER - MailHog (Testing)
+  # ============================================
+  travian-mail:
+    image: mailhog/mailhog:latest
+    container_name: travian-mail
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP
+      - "8091:8025"  # Web UI
+    networks:
+      - travian-network
+
+  # ============================================
+  # PHPMYADMIN - Database Management
+  # ============================================
+  travian-phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: travian-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: travian-db
+      PMA_USER: root
+      PMA_PASSWORD: travianroot123
+      PMA_ARBITRARY: 0
+      PMA_MAX_EXECUTION_TIME: 600
+      PMA_MEMORY_LIMIT: 512M
+    ports:
+      - "8081:80"
+    depends_on:
+      - travian-db
+    networks:
+      - travian-network
+
+  # ============================================
+  # MONITORING - Admin Dashboard
+  # ============================================
+  travian-monitor:
+    image: nginx:alpine
+    container_name: travian-monitor
+    restart: unless-stopped
+    volumes:
+      - ./monitor:/usr/share/nginx/html
+      - ./logs:/var/log/travian
+    ports:
+      - "8092:80"
+    networks:
+      - travian-network
+
+volumes:
+  travian_mysql_data:
+    driver: local
+  travian_redis_data:
+    driver: local
+
+networks:
+  travian-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

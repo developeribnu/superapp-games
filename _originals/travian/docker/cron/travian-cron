@@ -1,0 +1,87 @@
+# Travian Game Automation Cron Jobs
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# ============================================
+# RESOURCE PRODUCTION - Every Second Simulation
+# ============================================
+* * * * * root /scripts/resources.sh >> /var/log/cron/resources.log 2>&1
+
+# ============================================
+# BUILDING QUEUE - Process building completion
+# ============================================
+* * * * * root /scripts/buildings.sh >> /var/log/cron/buildings.log 2>&1
+* * * * * root sleep 30; /scripts/buildings.sh >> /var/log/cron/buildings.log 2>&1
+
+# ============================================
+# TRAINING QUEUE - Process troop training
+# ============================================
+* * * * * root /scripts/training.sh >> /var/log/cron/training.log 2>&1
+* * * * * root sleep 15; /scripts/training.sh >> /var/log/cron/training.log 2>&1
+* * * * * root sleep 30; /scripts/training.sh >> /var/log/cron/training.log 2>&1
+* * * * * root sleep 45; /scripts/training.sh >> /var/log/cron/training.log 2>&1
+
+# ============================================
+# ATTACKS & MOVEMENTS - Process troop movements
+# ============================================
+* * * * * root /scripts/movements.sh >> /var/log/cron/movements.log 2>&1
+* * * * * root sleep 10; /scripts/movements.sh >> /var/log/cron/movements.log 2>&1
+* * * * * root sleep 20; /scripts/movements.sh >> /var/log/cron/movements.log 2>&1
+* * * * * root sleep 30; /scripts/movements.sh >> /var/log/cron/movements.log 2>&1
+* * * * * root sleep 40; /scripts/movements.sh >> /var/log/cron/movements.log 2>&1
+* * * * * root sleep 50; /scripts/movements.sh >> /var/log/cron/movements.log 2>&1
+
+# ============================================
+# MARKET - Process trade movements
+# ============================================
+* * * * * root /scripts/market.sh >> /var/log/cron/market.log 2>&1
+
+# ============================================
+# DAILY MAINTENANCE - Run at 00:05
+# ============================================
+5 0 * * * root /scripts/daily_maintenance.sh >> /var/log/cron/maintenance.log 2>&1
+
+# ============================================
+# MEDALS - Every 24 hours
+# ============================================
+0 0 * * * root /scripts/medals.sh >> /var/log/cron/medals.log 2>&1
+
+# ============================================
+# BACKUP - Every 6 hours
+# ============================================
+0 */6 * * * root /scripts/backup.sh >> /var/log/cron/backup.log 2>&1
+
+# ============================================
+# CLEANUP - Every hour
+# ============================================
+0 * * * * root /scripts/cleanup.sh >> /var/log/cron/cleanup.log 2>&1
+
+# ============================================
+# STATISTICS UPDATE - Every hour
+# ============================================
+0 * * * * root /scripts/statistics.sh >> /var/log/cron/statistics.log 2>&1
+
+# ============================================
+# ARTIFACTS CHECK - Every 5 minutes
+# ============================================
+*/5 * * * * root /scripts/artifacts.sh >> /var/log/cron/artifacts.log 2>&1
+
+# ============================================
+# NATARS ACTIVITY - Every 10 minutes
+# ============================================
+*/10 * * * * root /scripts/natars.sh >> /var/log/cron/natars.log 2>&1
+
+# ============================================
+# ADVENTURES - Every minute
+# ============================================
+* * * * * root /scripts/adventures.sh >> /var/log/cron/adventures.log 2>&1
+
+# ============================================
+# GOLD SYSTEM FEATURES - Process gold/plus/auctions
+# ============================================
+*/5 * * * * root /scripts/gold_features.sh >> /var/log/cron/gold.log 2>&1
+
+# ============================================
+# CRON LOG ROTATION
+# ============================================
+0 0 * * 0 root find /var/log/cron -name "*.log" -type f -size +10M -delete

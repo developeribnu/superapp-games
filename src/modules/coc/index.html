@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoC Knowledge Base – Clash of Clans All in One</title>
+  <meta name="description" content="Knowledge base lengkap tentang Clash of Clans – troops, heroes, spells, buildings, strategi war, dan masih banyak lagi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;600;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏰</text></svg>" />
+</head>
+<body>
+
+  <!-- ── PARTICLES BACKGROUND ───────────────────────── -->
+  <div id="particles-bg"></div>
+
+  <!-- ── HEADER ─────────────────────────────────────── -->
+  <header id="site-header">
+    <div class="header-inner">
+      <div class="brand" onclick="showHome()">
+        <span class="brand-icon">🏰</span>
+        <div class="brand-text">
+          <span class="brand-title">CoC Knowledge Base</span>
+          <span class="brand-sub">Clash of Clans All in One</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" id="main-nav">
+        <a href="#" class="nav-link" data-section="all" onclick="filterCategory('all')">Semua</a>
+        <a href="#" class="nav-link" data-section="troops" onclick="filterCategory('troops')">Troops</a>
+        <a href="#" class="nav-link" data-section="heroes" onclick="filterCategory('heroes')">Heroes</a>
+        <a href="#" class="nav-link" data-section="spells" onclick="filterCategory('spells')">Spells</a>
+        <a href="#" class="nav-link" data-section="buildings" onclick="filterCategory('buildings')">Buildings</a>
+        <a href="#" class="nav-link" data-section="strategy" onclick="filterCategory('strategy')">Strategy</a>
+        <a href="#" class="nav-link" data-section="guides" onclick="filterCategory('guides')">Guides</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn-add" id="btn-add-article" onclick="openAddModal()">
+          <span>+</span> Tambah Artikel
+        </button>
+        <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MOBILE NAV ──────────────────────────────────── -->
+  <div class="mobile-nav-overlay" id="mobile-overlay" onclick="closeMobileNav()"></div>
+  <nav class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+    <a href="#" onclick="filterCategory('all');closeMobileNav()">🗂 Semua Artikel</a>
+    <a href="#" onclick="filterCategory('troops');closeMobileNav()">⚔️ Troops</a>
+    <a href="#" onclick="filterCategory('heroes');closeMobileNav()">🦸 Heroes</a>
+    <a href="#" onclick="filterCategory('spells');closeMobileNav()">✨ Spells</a>
+    <a href="#" onclick="filterCategory('buildings');closeMobileNav()">🏗️ Buildings</a>
+    <a href="#" onclick="filterCategory('defenses');closeMobileNav()">🛡️ Defenses</a>
+    <a href="#" onclick="filterCategory('strategy');closeMobileNav()">🎯 Strategy</a>
+    <a href="#" onclick="filterCategory('guides');closeMobileNav()">📖 Guides</a>
+    <a href="#" onclick="filterCategory('base-building');closeMobileNav()">🏰 Base Building</a>
+    <a href="#" onclick="filterCategory('clan-capital');closeMobileNav()">🌋 Clan Capital</a>
+    <hr>
+    <a href="#" onclick="openAddModal();closeMobileNav()">➕ Tambah Artikel</a>
+  </nav>
+
+  <!-- ── HERO / SEARCH SECTION ──────────────────────── -->
+  <section class="hero-section" id="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="title-line1">Clash of Clans</span>
+        <span class="title-line2">Knowledge Base</span>
+      </h1>
+      <p class="hero-desc">Tempat menyimpan semua pengetahuan CoC-mu – troops, heroes, spells, buildings, strategi, dan segalanya.</p>
+      <div class="search-container">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Cari troops, heroes, strategi..."
+            oninput="handleSearch(this.value)"
+            onkeydown="handleSearchKey(event)"
+            autocomplete="off"
+          />
+          <button class="search-clear" id="search-clear" onclick="clearSearch()" style="display:none">✕</button>
+        </div>
+        <div class="search-suggestions" id="search-suggestions"></div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><span class="stat-num" id="stat-total">0</span><span class="stat-label">Artikel</span></div>
+        <div class="stat-item"><span class="stat-num" id="stat-categories">10</span><span class="stat-label">Kategori</span></div>
+        <div class="stat-item"><span class="stat-num" id="stat-views">0</span><span class="stat-label">Dibaca</span></div>
+      </div>
+    </div>
+    <div class="hero-decoration">
+      <div class="deco-ring ring1"></div>
+      <div class="deco-ring ring2"></div>
+      <div class="deco-ring ring3"></div>
+    </div>
+  </section>
+
+  <!-- ── CATEGORY CHIPS ─────────────────────────────── -->
+  <section class="category-section">
+    <div class="container">
+      <div class="category-chips" id="category-chips">
+        <button class="chip active" data-cat="all" onclick="filterCategory('all')">🗂 Semua</button>
+        <button class="chip" data-cat="troops" onclick="filterCategory('troops')">⚔️ Troops</button>
+        <button class="chip" data-cat="heroes" onclick="filterCategory('heroes')">🦸 Heroes</button>
+        <button class="chip" data-cat="spells" onclick="filterCategory('spells')">✨ Spells</button>
+        <button class="chip" data-cat="buildings" onclick="filterCategory('buildings')">🏗️ Buildings</button>
+        <button class="chip" data-cat="defenses" onclick="filterCategory('defenses')">🛡️ Defenses</button>
+        <button class="chip" data-cat="strategy" onclick="filterCategory('strategy')">🎯 Strategy</button>
+        <button class="chip" data-cat="guides" onclick="filterCategory('guides')">📖 Guides</button>
+        <button class="chip" data-cat="base-building" onclick="filterCategory('base-building')">🏰 Base Building</button>
+        <button class="chip" data-cat="clan-capital" onclick="filterCategory('clan-capital')">🌋 Clan Capital</button>
+        <button class="chip" data-cat="events" onclick="filterCategory('events')">🎉 Events</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAIN CONTENT ───────────────────────────────── -->
+  <main class="main-content" id="main-content">
+    <div class="container">
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <span class="result-count" id="result-count"></span>
+          <span class="active-filter" id="active-filter"></span>
+        </div>
+        <div class="toolbar-right">
+          <div class="sort-select-wrap">
+            <select id="sort-select" onchange="handleSort(this.value)" class="sort-select">
+              <option value="newest">Terbaru</option>
+              <option value="oldest">Terlama</option>
+              <option value="az">A–Z</option>
+              <option value="za">Z–A</option>
+              <option value="popular">Terpopuler</option>
+            </select>
+          </div>
+          <div class="view-toggle">
+            <button class="view-btn active" id="view-grid" onclick="setView('grid')" title="Grid">⊞</button>
+            <button class="view-btn" id="view-list" onclick="setView('list')" title="List">☰</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Section -->
+      <section class="featured-section" id="featured-section">
+        <h2 class="section-title"><span class="section-icon">⭐</span> Featured</h2>
+        <div class="featured-grid" id="featured-grid"></div>
+      </section>
+
+      <!-- Articles Grid -->
+      <section class="articles-section">
+        <h2 class="section-title" id="articles-section-title"><span class="section-icon">📚</span> Semua Artikel</h2>
+        <div class="articles-grid" id="articles-grid"></div>
+        <div class="empty-state" id="empty-state" style="display:none">
+          <div class="empty-icon">🔍</div>
+          <h3>Tidak ada artikel ditemukan</h3>
+          <p>Coba ubah kata kunci pencarian atau filter kategori</p>
+          <button class="btn-primary" onclick="clearSearch(); filterCategory('all')">Reset Filter</button>
+        </div>
+        <div class="load-more-wrap" id="load-more-wrap" style="display:none">
+          <button class="btn-load-more" id="btn-load-more" onclick="loadMore()">Muat Lebih Banyak</button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ── ARTICLE MODAL ──────────────────────────────── -->
+  <div class="modal-overlay" id="article-modal" onclick="closeArticleModal(event)">
+    <div class="modal-box" id="article-modal-box">
+      <button class="modal-close" onclick="closeArticleModal()">✕</button>
+      <div class="modal-header">
+        <div class="modal-category-badge" id="modal-category"></div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <div class="modal-meta">
+          <span id="modal-date"></span>
+          <span class="modal-tags" id="modal-tags"></span>
+        </div>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <div class="modal-views"><span>👁</span> <span id="modal-views">0</span> kali dibaca</div>
+        <div class="modal-actions">
+          <button class="btn-edit" id="modal-edit-btn" onclick="openEditModal()">✏️ Edit</button>
+          <button class="btn-delete" id="modal-delete-btn" onclick="deleteCurrentArticle()">🗑 Hapus</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ADD / EDIT MODAL ───────────────────────────── -->
+  <div class="modal-overlay" id="form-modal" onclick="closeFormModal(event)">
+    <div class="modal-box form-modal-box" id="form-modal-box">
+      <button class="modal-close" onclick="closeFormModal()">✕</button>
+      <h2 class="modal-form-title" id="form-modal-title">Tambah Artikel Baru</h2>
+      <form id="article-form" onsubmit="handleFormSubmit(event)">
+        <div class="form-group">
+          <label for="form-title">Judul Artikel *</label>
+          <input type="text" id="form-title" placeholder="Contoh: Cara Upgrade Barbarian King dengan Efisien" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-category">Kategori *</label>
+            <select id="form-category" required>
+              <option value="">-- Pilih Kategori --</option>
+              <option value="troops">⚔️ Troops</option>
+              <option value="heroes">🦸 Heroes</option>
+              <option value="spells">✨ Spells</option>
+              <option value="buildings">🏗️ Buildings</option>
+              <option value="defenses">🛡️ Defenses</option>
+              <option value="strategy">🎯 Strategy</option>
+              <option value="guides">📖 Guides</option>
+              <option value="base-building">🏰 Base Building</option>
+              <option value="clan-capital">🌋 Clan Capital</option>
+              <option value="events">🎉 Events</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-tags">Tags (pisah dengan koma)</label>
+            <input type="text" id="form-tags" placeholder="th16, upgrade, dark elixir" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="form-summary">Ringkasan</label>
+          <input type="text" id="form-summary" placeholder="Ringkasan singkat artikel (opsional)" />
+        </div>
+        <div class="form-group">
+          <label for="form-content">Konten *</label>
+          <div class="editor-toolbar">
+            <button type="button" onclick="formatText('**','**')" title="Bold">B</button>
+            <button type="button" onclick="formatText('*','*')" title="Italic"><i>I</i></button>
+            <button type="button" onclick="insertHeading()" title="Heading">H</button>
+            <button type="button" onclick="insertList()" title="List">• List</button>
+            <button type="button" onclick="insertTable()" title="Table">⊞ Table</button>
+            <button type="button" onclick="insertCode()" title="Code">&lt;/&gt;</button>
+            <button type="button" onclick="insertHR()" title="Divider">──</button>
+            <button type="button" class="preview-toggle-btn" onclick="togglePreview()" id="preview-toggle-btn">👁 Preview</button>
+          </div>
+          <textarea id="form-content" rows="14" placeholder="Tulis konten artikel di sini...&#10;&#10;Mendukung Markdown:&#10;## Judul&#10;**teks tebal**&#10;*teks miring*&#10;- list item&#10;| Kolom | Kolom |&#10;| ----- | ----- |&#10;| data  | data  |" required></textarea>
+          <div id="content-preview" class="content-preview" style="display:none"></div>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="form-featured" />
+            Tandai sebagai Featured
+          </label>
+        </div>
+        <div class="form-footer">
+          <button type="button" class="btn-cancel" onclick="closeFormModal()">Batal</button>
+          <button type="submit" class="btn-primary" id="form-submit-btn">💾 Simpan Artikel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── CONFIRM DIALOG ─────────────────────────────── -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal-box confirm-box">
+      <div class="confirm-icon">⚠️</div>
+      <h3 id="confirm-title">Hapus Artikel?</h3>
+      <p id="confirm-message">Tindakan ini tidak bisa dibatalkan.</p>
+      <div class="confirm-actions">
+        <button class="btn-cancel" onclick="closeConfirmModal()">Batal</button>
+        <button class="btn-danger" id="confirm-ok-btn">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TOAST NOTIFICATION ─────────────────────────── -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ── SCROLL TO TOP ──────────────────────────────── -->
+  <button class="scroll-top" id="scroll-top" onclick="scrollToTop()" title="Kembali ke atas">▲</button>
+
+  <!-- ── FOOTER ─────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="footer-logo">🏰</span>
+          <span>CoC Knowledge Base</span>
+        </div>
+        <p class="footer-desc">Knowledge base pribadi untuk semua hal tentang Clash of Clans.<br>Dibuat dengan ❤️ oleh <strong>Subkhan Ibnu Aji</strong></p>
+        <div class="footer-note">
+          Clash of Clans adalah merek dagang dari Supercell. Situs ini tidak berafiliasi dengan Supercell.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="data/knowledge.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

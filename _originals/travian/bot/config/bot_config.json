@@ -1,0 +1,24 @@
+{
+  "auto_upgrade": {
+    "enabled": true,
+    "priority": ["woodcutter", "clay_pit", "iron_mine", "cropland"],
+    "min_resources_keep": 100,
+    "max_queue": 2
+  },
+  "auto_farm": {
+    "enabled": true,
+    "oases_distance": 3,
+    "min_troops": 5
+  },
+  "auto_trade": {
+    "enabled": true,
+    "threshold": 0.8,
+    "min_trade_amount": 100
+  },
+  "auto_train": {
+    "enabled": false,
+    "troop_type": "phalanx",
+    "batch_size": 5
+  },
+  "check_interval": 300
+}

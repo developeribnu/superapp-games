@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravianMaster - Panduan Strategi Travian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background-attachment: fixed;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-effect-light {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #e94560 0%, #f97316 50%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .strategy-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(233, 69, 96, 0.3);
+        }
+
+        .tribe-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .tribe-roman {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #ef4444;
+        }
+
+        .tribe-gaul {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #22c55e;
+        }
+
+        .tribe-teuton {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            color: #a855f7;
+        }
+
+        .stat-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #f97316);
+            transition: width 0.6s ease;
+            border-radius: 10px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-tab {
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin: 5px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid transparent;
+            font-size: 13px;
+        }
+
+        .nav-tab:hover {
+            background: rgba(233, 69, 96, 0.1);
+            border-color: rgba(233, 69, 96, 0.3);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.3), rgba(249, 115, 22, 0.3));
+            border-color: rgba(233, 69, 96, 0.5);
+            color: #ef4444;
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #e5e7eb;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(233, 69, 96, 0.5);
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.3);
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #e94560, #f97316);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(233, 69, 96, 0.4);
+        }
+
+        .result-box {
+            background: rgba(233, 69, 96, 0.1);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table td {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .resource-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 8px;
+        }
+
+        .timeline-item {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid #e94560;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-left-color: #f97316;
+        }
+
+        .army-unit {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .army-unit:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(233, 69, 96, 0.3);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .strategy-priority {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid #f97316;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .priority-number {
+            background: linear-gradient(135deg, #e94560, #f97316);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Navbar -->
+    <nav class="glass-effect sticky top-0 z-50 border-b border-red-500/20">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-red-600 to-orange-600 flex items-center justify-center">
+                    <span class="text-xl font-bold">⚔️</span>
+                </div>
+                <h1 class="text-2xl font-bold gradient-text">TravianMaster</h1>
+            </div>
+            <div class="flex gap-2 text-sm flex-wrap">
+                <button class="nav-tab active" onclick="switchTab('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="switchTab('start')">Mulai</button>
+                <button class="nav-tab" onclick="switchTab('tribes')">Suku</button>
+                <button class="nav-tab" onclick="switchTab('calculator')">Kalkulator</button>
+                <button class="nav-tab" onclick="switchTab('resources')">Sumber Daya</button>
+                <button class="nav-tab" onclick="switchTab('strategy')">Strategi</button>
+                <button class="nav-tab" onclick="switchTab('pro')">Pro Tips</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <h2 class="text-3xl font-bold mb-8">Dashboard Travian Master</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="glass-effect-light p-6 rounded-lg strategy-card">
+                    <div class="text-sm text-gray-400 mb-2">Level Vilage</div>
+                    <div class="text-3xl font-bold">12</div>
+                    <div class="stat-bar"><div class="stat-fill" style="width: 65%"></div></div>
+                    <div class="text-xs text-gray-400 mt-2">Progress: 65%</div>
+                </div>
+                <div class="glass-effect-light p-6 rounded-lg strategy-card">
+                    <div class="text-sm text-gray-400 mb-2">Sumber Daya</div>
+                    <div class="text-3xl font-bold">450K</div>
+                    <div class="stat-bar"><div class="stat-fill" style="width: 80%"></div></div>
+                    <div class="text-xs text-gray-400 mt-2">Produksi/jam: 45K</div>
+                </div>
+                <div class="glass-effect-light p-6 rounded-lg strategy-card">
+                    <div class="text-sm text-gray-400 mb-2">Unit Militer</div>
+                    <div class="text-3xl font-bold">2.5K</div>
+                    <div class="stat-bar"><div class="stat-fill" style="width: 72%"></div></div>
+                    <div class="text-xs text-gray-400 mt-2">Attack Power: 8.5K</div>
+                </div>
+                <div class="glass-effect-light p-6 rounded-lg strategy-card">
+                    <div class="text-sm text-gray-400 mb-2">Persahabatan</div>
+                    <div class="text-3xl font-bold">14</div>
+                    <div class="stat-bar"><div class="stat-fill" style="width: 45%"></div></div>
+                    <div class="text-xs text-gray-400 mt-2">Aliansi Aktif</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="glass-effect-light rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">Pencapaian Terbaru</h3>
+                    <div class="space-y-3">
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Infanteri Veteran</div>
+                            <div class="text-xs text-gray-400 mt-1">Latih 500 unit infanteri</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Prajurit Berkuda</div>
+                            <div class="text-xs text-gray-400 mt-1">Latih 200 unit cavalry</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Pembangunan Besar</div>
+                            <div class="text-xs text-gray-400 mt-1">Selesaikan 25 bangunan</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect-light rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">Pertempuran Terbaru</h3>
+                    <div class="space-y-3">
+                        <div class="timeline-item">
+                            <div class="flex items-center justify-between">
+                                <div class="font-semibold text-sm text-green-400">Kemenangan</div>
+                                <span class="text-xs text-gray-400">3 jam yang lalu</span>
+                            </div>
+                            <div class="text-xs text-gray-400 mt-1">Raid Village Musuh - 45K Logam</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="flex items-center justify-between">
+                                <div class="font-semibold text-sm text-yellow-400">Pertahanan</div>
+                                <span class="text-xs text-gray-400">8 jam yang lalu</span>
+                            </div>
+                            <div class="text-xs text-gray-400 mt-1">Serangan ditahan - 0 unit tewas</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="flex items-center justify-between">
+                                <div class="font-semibold text-sm text-red-400">Kekalahan</div>
+                                <span class="text-xs text-gray-400">1 hari yang lalu</span>
+                            </div>
+                            <div class="text-xs text-gray-400 mt-1">Diserang - Kerugian 120 unit</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4">Suku Anda</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-4 bg-black/40 rounded-lg">
+                        <span class="tribe-badge tribe-roman">ROMAWI</span>
+                        <div class="text-sm text-gray-300 mt-3">Kekuatan: Kombo Infanteri + Cavalry</div>
+                        <div class="text-xs text-gray-400 mt-2">Gaya Bermain: Balanced</div>
+                    </div>
+                    <div class="text-center p-4 bg-black/40 rounded-lg">
+                        <span class="tribe-badge tribe-gaul">GAUL</span>
+                        <div class="text-sm text-gray-300 mt-3">Kekuatan: Pertahanan + Farming</div>
+                        <div class="text-xs text-gray-400 mt-2">Gaya Bermain: Defensive</div>
+                    </div>
+                    <div class="text-center p-4 bg-black/40 rounded-lg">
+                        <span class="tribe-badge tribe-teuton">TEUTON</span>
+                        <div class="text-sm text-gray-300 mt-3">Kekuatan: Cavalry + Penyerang</div>
+                        <div class="text-xs text-gray-400 mt-2">Gaya Bermain: Aggressive</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started Tab -->
+        <div id="start" class="tab-content">
+            <h2 class="text-3xl font-bold mb-8">Panduan Memulai Travian</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-effect-light rounded-lg overflow-hidden strategy-card">
+                    <div class="h-12 bg-gradient-to-r from-blue-600 to-cyan-600"></div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold mb-2">Minggu Pertama</h3>
+                        <div class="space-y-3 text-sm text-gray-300">
+                            <div class="strategy-priority">
+                                <div class="priority-number">1</div>
+                                <div>Upgrade Barracks</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">2</div>
+                                <div>Build Farm</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">3</div>
+                                <div>Train 50 Infantry</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">4</div>
+                                <div>Join Aliansi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect-light rounded-lg overflow-hidden strategy-card">
+                    <div class="h-12 bg-gradient-to-r from-yellow-600 to-amber-600"></div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold mb-2">Bulan Pertama</h3>
+                        <div class="space-y-3 text-sm text-gray-300">
+                            <div class="strategy-priority">
+                                <div class="priority-number">1</div>
+                                <div>Upgrade Wall lvl 3</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">2</div>
+                                <div>Build Stable (Cavalry)</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">3</div>
+                                <div>Get 300+ Infantry</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">4</div>
+                                <div>Farming Routine</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect-light rounded-lg overflow-hidden strategy-card">
+                    <div class="h-12 bg-gradient-to-r from-purple-600 to-pink-600"></div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold mb-2">Bulan Kedua+</h3>
+                        <div class="space-y-3 text-sm text-gray-300">
+                            <div class="strategy-priority">
+                                <div class="priority-number">1</div>
+                                <div>Upgrade Key Buildings</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">2</div>
+                                <div>Build 2nd Village</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">3</div>
+                                <div>Advanced Tactics</div>
+                            </div>
+                            <div class="strategy-priority">
+                                <div class="priority-number">4</div>
+                                <div>Plan for WW</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6 mb-8">
+                <h3 class="text-lg font-bold mb-4">Building Priority - Early Game</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Urutan</th>
+                            <th>Bangunan</th>
+                            <th>Level Target</th>
+                            <th>Fungsi</th>
+                            <th>Timeline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">1</td>
+                            <td>Palace / Residence</td>
+                            <td>1</td>
+                            <td>Unlock village founding</td>
+                            <td>Hari 1-3</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">2</td>
+                            <td>Barracks</td>
+                            <td>3</td>
+                            <td>Train infantry</td>
+                            <td>Hari 3-7</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">3</td>
+                            <td>Farm List</td>
+                            <td>1</td>
+                            <td>Kelola farming</td>
+                            <td>Hari 5</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">4</td>
+                            <td>Marketplace</td>
+                            <td>1</td>
+                            <td>Trade resources</td>
+                            <td>Hari 7-10</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">5</td>
+                            <td>Stable</td>
+                            <td>2</td>
+                            <td>Train cavalry</td>
+                            <td>Hari 10-15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4">Resource Management Dasar</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-black/40 rounded-lg p-4 text-center">
+                        <div class="text-2xl mb-2">🌾</div>
+                        <div class="font-semibold text-sm mb-2">Biji-bijian</div>
+                        <div class="text-xs text-gray-400">Kebutuhan Food untuk Unit</div>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4 text-center">
+                        <div class="text-2xl mb-2">🪨</div>
+                        <div class="font-semibold text-sm mb-2">Batu</div>
+                        <div class="text-xs text-gray-400">Untuk Building Construction</div>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4 text-center">
+                        <div class="text-2xl mb-2">🌳</div>
+                        <div class="font-semibold text-sm mb-2">Kayu</div>
+                        <div class="text-xs text-gray-400">Material Paling Penting</div>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4 text-center">
+                        <div class="text-2xl mb-2">⚙️</div>
+                        <div class="font-semibold text-sm mb-2">Besi</div>
+                        <div class="text-xs text-gray-400">Training Units</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tribes Tab -->
+        <div id="tribes" class="tab-content">
+            <h2 class="text-3xl font-bold mb-8">Panduan Pemilihan Suku</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- Roman Tribe -->
+                <div class="glass-effect-light rounded-lg overflow-hidden strategy-card">
+                    <div class="h-32 bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
+                        <span class="text-5xl">🦅</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="tribe-badge tribe-roman">ROMAWI</span>
+                            <span class="text-xs text-gray-400">Suku Seimbang</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-3">Keunggulan</h3>
+                        <ul class="text-sm space-y-2 mb-4">
+                            <li>⚔️ Infantry & Cavalry Balance</li>
+                            <li>🏰 Defensive Strength</li>
+                            <li>📈 Mudah Farming</li>
+                            <li>💰 Production Stabil</li>
+                        </ul>
+                        <h3 class="text-lg font-bold mb-3">Unit Utama</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between bg-black/40 p-2 rounded">
+                                <span>Legioner</span>
+                                <span>Attack: 40</span>
+                            </div>
+                            <div class="flex justify-between bg-black/40 p-2 rounded">
+                                <span>Equites</span>
+                                <span>Attack: 80</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gaul Tribe -->
+                <div class="glass-effect-light rounded-lg overflow-hidden strategy-card">
+                    <div class="h-32 bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center">
+                        <span class="text-5xl">🛡️</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="tribe-badge tribe-gaul">GAUL</span>
+                            <span class="text-xs text-gray-400">Suku Defensif</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-3">Keunggulan</h3>
+                        <ul class="text-sm space-y-2 mb-4">
+                            <li>🛡️ Pertahanan Luar Biasa</li>
+                            <li>👥 Banyak Populasi</li>
+                            <li>💵 Cheaper Training</li>
+                            <li>🚀 Cepat Berlipat Ganda</li>
+                        </ul>
+                        <h3 class="text-lg font-bold mb-3">Unit Utama</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between bg-black/40 p-2 rounded">
+                                <span>Javelineer</span>
+                                <span>Defense: 35</span>
+                            </div>
+                            <div class="flex justify-between bg-black/40 p-2 rounded">
+                                <span>Druidrider</span>
+                                <span>Defense: 90</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teuton Tribe -->
+                <div class="glass-effect-light rounded-lg overflow-hidden strategy-card">
+                    <div class="h-32 bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center">
+                        <span class="text-5xl">⚔️</span>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="tribe-badge tribe-teuton">TEUTON</span>
+                            <span class="text-xs text-gray-400">Suku Agresif</span>
+                        </div>
+                        <h3 class="text-lg font-bold mb-3">Keunggulan</h3>
+                        <ul class="text-sm space-y-2 mb-4">
+                            <li>⚔️ Attack Power Tinggi</li>
+                            <li>🎯 Cavalry Dominasi</li>
+                            <li>💎 More Loot</li>
+                            <li>🌍 Ekspansi Cepat</li>
+                        </ul>
+                        <h3 class="text-lg font-bold mb-3">Unit Utama</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between bg-black/40 p-2 rounded">
+                                <span>Phalanx</span>
+                                <span>Defense: 40</span>
+                            </div>
+                            <div class="flex justify-between bg-black/40 p-2 rounded">
+                                <span>Teutonic Knight</span>
+                                <span>Attack: 150</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4">Perbandingan Tribe - Stats Lengkap</h3>
+                <div class="overflow-x-auto">
+                    <table class="comparison-table w-full">
+                        <thead>
+                            <tr>
+                                <th>Stat</th>
+                                <th>Romawi</th>
+                                <th>Gaul</th>
+                                <th>Teuton</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-bold">Offense Power</td>
+                                <td>8/10</td>
+                                <td>6/10</td>
+                                <td>10/10</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">Defense Power</td>
+                                <td>8/10</td>
+                                <td>10/10</td>
+                                <td>7/10</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">Resource Efficiency</td>
+                                <td>8/10</td>
+                                <td>9/10</td>
+                                <td>6/10</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">Farming Capability</td>
+                                <td>9/10</td>
+                                <td>8/10</td>
+                                <td>7/10</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">Early Game</td>
+                                <td>8/10</td>
+                                <td>9/10</td>
+                                <td>7/10</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">Late Game</td>
+                                <td>8/10</td>
+                                <td>7/10</td>
+                                <td>9/10</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">Kurva Belajar</td>
+                                <td>Mudah</td>
+                                <td>Sedang</td>
+                                <td>Sulit</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculator Tab -->
+        <div id="calculator" class="tab-content">
+            <h2 class="text-3xl font-bold mb-8">Army Calculator & Training</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <!-- Army Strength Calculator -->
+                <div class="glass-effect-light rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">Kalkulator Kekuatan Army</h3>
+
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Pilih Suku</label>
+                            <select class="input-field w-full">
+                                <option>Romawi - Legioner</option>
+                                <option>Gaul - Javelineer</option>
+                                <option>Teuton - Phalanx</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Jumlah Infantry/Phalanx</label>
+                            <input type="number" class="input-field w-full" id="infantryCount" placeholder="500" value="500">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Jumlah Cavalry/Druidrider</label>
+                            <input type="number" class="input-field w-full" id="cavalryCount" placeholder="200" value="200">
+                        </div>
+
+                        <button class="btn-calculate w-full" onclick="calculateArmyStrength()">Hitung Kekuatan</button>
+                    </div>
+
+                    <div id="armyResult" class="result-box hidden">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <div class="text-xs text-gray-400 mb-1">Attack Power</div>
+                                <div class="text-2xl font-bold text-red-400" id="attackPower">-</div>
+                            </div>
+                            <div>
+                                <div class="text-xs text-gray-400 mb-1">Defense Power</div>
+                                <div class="text-2xl font-bold text-green-400" id="defensePower">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Time Calculator -->
+                <div class="glass-effect-light rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">Kalkulator Waktu Training</h3>
+
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Jenis Unit</label>
+                            <select class="input-field w-full">
+                                <option>Infantry (1 unit = 100 detik)</option>
+                                <option>Cavalry (1 unit = 200 detik)</option>
+                                <option>Seige (1 unit = 320 detik)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Jumlah Unit</label>
+                            <input type="number" class="input-field w-full" id="unitCount" placeholder="100" value="100">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Barracks Level</label>
+                            <input type="number" class="input-field w-full" id="barracksLevel" placeholder="10" value="10" min="1" max="20">
+                        </div>
+
+                        <button class="btn-calculate w-full" onclick="calculateTrainingTime()">Hitung Waktu</button>
+                    </div>
+
+                    <div id="trainingResult" class="result-box hidden">
+                        <div>
+                            <div class="text-xs text-gray-400 mb-2">Total Training Time</div>
+                            <div class="text-2xl font-bold text-yellow-400 mb-3" id="trainingTime">-</div>
+                            <div class="text-xs text-gray-300">Dengan hero berkualitas, waktu dapat dikurangi 25%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4">Unit Stats Reference</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <h4 class="font-bold mb-3 text-red-400">Roman Units</h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="army-unit">
+                                <div class="font-semibold">Legioner</div>
+                                <div>Atk: 40 | Def: 35</div>
+                            </div>
+                            <div class="army-unit">
+                                <div class="font-semibold">Praetorian</div>
+                                <div>Atk: 50 | Def: 60</div>
+                            </div>
+                            <div class="army-unit">
+                                <div class="font-semibold">Equites</div>
+                                <div>Atk: 80 | Def: 40</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold mb-3 text-green-400">Gaul Units</h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="army-unit">
+                                <div class="font-semibold">Phalangist</div>
+                                <div>Atk: 30 | Def: 50</div>
+                            </div>
+                            <div class="army-unit">
+                                <div class="font-semibold">Swordsman</div>
+                                <div>Atk: 50 | Def: 55</div>
+                            </div>
+                            <div class="army-unit">
+                                <div class="font-semibold">Druidrider</div>
+                                <div>Atk: 60 | Def: 90</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold mb-3 text-purple-400">Teuton Units</h4>
+                        <div class="space-y-2 text-xs">
+                            <div class="army-unit">
+                                <div class="font-semibold">Phalanx</div>
+                                <div>Atk: 40 | Def: 40</div>
+                            </div>
+                            <div class="army-unit">
+                                <div class="font-semibold">Swordsman</div>
+                                <div>Atk: 70 | Def: 40</div>
+                            </div>
+                            <div class="army-unit">
+                                <div class="font-semibold">Teutonic Knight</div>
+                                <div>Atk: 150 | Def: 60</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Tab -->
+        <div id="resources" class="tab-content">
+            <h2 class="text-3xl font-bold mb-8">Resource Management & Optimization</h2>
+
+            <div class="glass-effect-light rounded-lg p-6 mb-8">
+                <h3 class="text-lg font-bold mb-4">Resource Production Optimizer</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="text-2xl mb-2">🌾</div>
+                        <div class="text-sm font-semibold mb-1">Grain Field Level</div>
+                        <input type="number" class="input-field w-full text-xs" placeholder="10" value="10">
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="text-2xl mb-2">🪨</div>
+                        <div class="text-sm font-semibold mb-1">Stone Quarry Level</div>
+                        <input type="number" class="input-field w-full text-xs" placeholder="10" value="10">
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="text-2xl mb-2">🌳</div>
+                        <div class="text-sm font-semibold mb-1">Forest Level</div>
+                        <input type="number" class="input-field w-full text-xs" placeholder="10" value="10">
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="text-2xl mb-2">⚙️</div>
+                        <div class="text-sm font-semibold mb-1">Iron Mine Level</div>
+                        <input type="number" class="input-field w-full text-xs" placeholder="10" value="10">
+                    </div>
+                </div>
+
+                <button class="btn-calculate w-full" onclick="calculateProduction()">Hitung Produksi</button>
+
+                <div id="productionResult" class="result-box hidden mt-6">
+                    <h4 class="font-bold mb-4">Produksi Per Jam</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                        <div>
+                            <div class="text-xs text-gray-400 mb-1">Grain</div>
+                            <div class="text-lg font-bold text-yellow-400" id="grainProd">-</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-400 mb-1">Stone</div>
+                            <div class="text-lg font-bold text-stone-400" id="stoneProd">-</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-400 mb-1">Wood</div>
+                            <div class="text-lg font-bold text-amber-600" id="woodProd">-</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-400 mb-1">Iron</div>
+                            <div class="text-lg font-bold text-gray-400" id="ironProd">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4">Strategi Resource Management</h3>
+                <div class="space-y-4">
+                    <div class="timeline-item">
+                        <div class="font-semibold text-sm">Produksi Seimbang (Beginner)</div>
+                        <div class="text-xs text-gray-300 mt-2">Upgrade semua resource field secara merata untuk sustainability jangka panjang.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="font-semibold text-sm">Fokus Wood & Stone (Early Game)</div>
+                        <div class="text-xs text-gray-300 mt-2">Prioritaskan Wood dan Stone untuk building expansion, Grain untuk unit training.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="font-semibold text-sm">Balanced Growth (Mid Game)</div>
+                        <div class="text-xs text-gray-300 mt-2">Jaga produksi seimbang sambil fokus pada ekspansi dan army building.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="font-semibold text-sm">Maximize Efficiency (Late Game)</div>
+                        <div class="text-xs text-gray-300 mt-2">Gunakan marketplace untuk trading surplus resources dan farming strategy.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategy Tab -->
+        <div id="strategy" class="tab-content">
+            <h2 class="text-3xl font-bold mb-8">Strategi Battle & Defense</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="glass-effect-light rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-red-400">Attacking Strategy</h3>
+                    <div class="space-y-3">
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Scout Target</div>
+                            <div class="text-xs text-gray-300 mt-1">Kirim spy untuk cek defenses dan resources</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Build Balanced Army</div>
+                            <div class="text-xs text-gray-300 mt-1">Mix infantry, cavalry, dan siege untuk cover semua</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Multiple Waves</div>
+                            <div class="text-xs text-gray-300 mt-1">Kirim attack dalam beberapa gelombang untuk maximize loot</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Time Your Attacks</div>
+                            <div class="text-xs text-gray-300 mt-1">Attack saat defender offline untuk bonus keuntungan</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect-light rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-green-400">Defense Strategy</h3>
+                    <div class="space-y-3">
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Wall Upgrade Prioritas</div>
+                            <div class="text-xs text-gray-300 mt-1">Jaga dinding tetap di-upgrade untuk defense maksimal</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Barracks Units Ready</div>
+                            <div class="text-xs text-gray-300 mt-1">Train unit defensive seperti Phalanx dan Druidrider</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Cranny Storage</div>
+                            <div class="text-xs text-gray-300 mt-1">Bangun caches untuk hide resources dari attacker</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="font-semibold text-sm">Ally Support</div>
+                            <div class="text-xs text-gray-300 mt-1">Join aliansi untuk defensive troops dari ally</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6 mb-8">
+                <h3 class="text-lg font-bold mb-4">Raid Strategy - Farming Guide</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="font-bold text-yellow-400 mb-3">Target Selection</div>
+                        <ul class="text-xs space-y-2">
+                            <li>• Cari village kecil dengan resources banyak</li>
+                            <li>• Check wall level - lebih rendah lebih bagus</li>
+                            <li>• Hindari village dengan banyak defensive unit</li>
+                            <li>• Pilih yang 10-15 field ratio</li>
+                        </ul>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="font-bold text-red-400 mb-3">Attack Composition</div>
+                        <ul class="text-xs space-y-2">
+                            <li>• 60% Cavalry - cepat dan damage tinggi</li>
+                            <li>• 30% Infantry - balanced damage</li>
+                            <li>• 10% Siege - break through walls</li>
+                            <li>• Minimal losses = maximum profit</li>
+                        </ul>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="font-bold text-green-400 mb-3">Farming Routine</div>
+                        <ul class="text-xs space-y-2">
+                            <li>• 2-3x daily farm runs</li>
+                            <li>• Scout untuk find best targets</li>
+                            <li>• Space out attacks untuk avoid suspicion</li>
+                            <li>• Track targets untuk consistency</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4">World Wonder Strategy</h3>
+                <div class="space-y-4">
+                    <div class="timeline-item">
+                        <div class="font-semibold text-sm">Pengetahuan WW</div>
+                        <div class="text-xs text-gray-300 mt-1">Pahami kesuksesan requires large coalition dan koordinasi aliansi</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="font-semibold text-sm">Multi Village Setup</div>
+                        <div class="text-xs text-gray-300 mt-1">Fokuskan 3-5 village untuk farming dan building WW secara paralel</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="font-semibold text-sm">Resource Merging</div>
+                        <div class="text-xs text-gray-300 mt-1">Gunakan marketplace untuk merge resources ke village WW</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="font-semibold text-sm">Alliance Timing</div>
+                        <div class="text-xs text-gray-300 mt-1">Sinkronisasikan dengan aliansi untuk defend WW dari attacker musuh</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pro Tips Tab -->
+        <div id="pro" class="tab-content">
+            <h2 class="text-3xl font-bold mb-8">Pro Tips & Advanced Tactics</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="glass-effect-light rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-blue-400">Advanced Army Composition</h3>
+                    <div class="space-y-3">
+                        <div class="bg-black/40 rounded-lg p-4">
+                            <div class="font-bold text-sm mb-2">Balanced Raid Fleet</div>
+                            <div class="text-xs text-gray-300">40% Cavalry, 35% Infantry, 25% Siege - Efisien untuk mid-game farming</div>
+                        </div>
+                        <div class="bg-black/40 rounded-lg p-4">
+                            <div class="font-bold text-sm mb-2">Aggressive Wave Attack</div>
+                            <div class="text-xs text-gray-300">80% Cavalry first wave, 100% Siege second - Overpower defenses quickly</div>
+                        </div>
+                        <div class="bg-black/40 rounded-lg p-4">
+                            <div class="font-bold text-sm mb-2">Defensive Stack</div>
+                            <div class="text-xs text-gray-300">Mostly Phalanx/Druidrider dengan minimal attackers - Optimal for big wall</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect-light rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4 text-purple-400">Economy Tips</h3>
+                    <div class="space-y-3">
+                        <div class="bg-black/40 rounded-lg p-4">
+                            <div class="font-bold text-sm mb-2">Marketplace Arbitrage</div>
+                            <div class="text-xs text-gray-300">Buy low price resources saat surplus, sell high saat deficit untuk profit</div>
+                        </div>
+                        <div class="bg-black/40 rounded-lg p-4">
+                            <div class="font-bold text-sm mb-2">Oasis Farming</div>
+                            <div class="text-xs text-gray-300">Occupy oases untuk bonus production 25% per field type</div>
+                        </div>
+                        <div class="bg-black/40 rounded-lg p-4">
+                            <div class="font-bold text-sm mb-2">Trade Route Mastery</div>
+                            <div class="text-xs text-gray-300">Leverage merchant sistem untuk automated resource transfers antar village</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6 mb-8">
+                <h3 class="text-lg font-bold mb-4 text-yellow-400">Game Mechanics Secrets</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="font-bold text-sm mb-3">Off-Server Time</div>
+                        <ul class="text-xs space-y-2">
+                            <li>⏰ Server maintenance: best farming time</li>
+                            <li>⏰ Night hours: safest for expansion</li>
+                            <li>⏰ Holiday periods: low competition</li>
+                        </ul>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="font-bold text-sm mb-3">Cropper Fields</div>
+                        <ul class="text-xs space-y-2">
+                            <li>📊 Dapat +25% crop production bonus</li>
+                            <li>📊 Spawn random di map awal</li>
+                            <li>📊 Sangat valuable untuk mid-late game</li>
+                        </ul>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="font-bold text-sm mb-3">Hero Usage</div>
+                        <ul class="text-xs space-y-2">
+                            <li>🦸 Train hero untuk 25% farming bonus</li>
+                            <li>🦸 Respec attributes untuk adjust strategy</li>
+                            <li>🦸 Revival time semakin lama late game</li>
+                        </ul>
+                    </div>
+                    <div class="bg-black/40 rounded-lg p-4">
+                        <div class="font-bold text-sm mb-3">Troop Switching</div>
+                        <ul class="text-xs space-y-2">
+                            <li>🔄 Cancel training untuk instant refund</li>
+                            <li>🔄 Use untuk quick adaptasi ke meta</li>
+                            <li>🔄 Mulai training sebelum attack arrive</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-effect-light rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 text-pink-400">Beginner Mistakes to Avoid</h3>
+                <div class="space-y-3">
+                    <div class="timeline-item bg-red-900/20 border-l-red-600">
+                        <div class="font-bold text-sm">❌ Overbuilding Too Fast</div>
+                        <div class="text-xs text-gray-300 mt-1">Build hanya diperlukan buildings, jangan waste resources</div>
+                    </div>
+                    <div class="timeline-item bg-red-900/20 border-l-red-600">
+                        <div class="font-bold text-sm">❌ Training Too Many Units</div>
+                        <div class="text-xs text-gray-300 mt-1">Fokus balanced composition, jangan spam satu tipe unit</div>
+                    </div>
+                    <div class="timeline-item bg-red-900/20 border-l-red-600">
+                        <div class="font-bold text-sm">❌ Ignoring Defense</div>
+                        <div class="text-xs text-gray-300 mt-1">Jaga wall level dan stash resources di cranny</div>
+                    </div>
+                    <div class="timeline-item bg-red-900/20 border-l-red-600">
+                        <div class="font-bold text-sm">❌ No Alliance</div>
+                        <div class="text-xs text-gray-300 mt-1">Join aliansi dari hari pertama untuk protection dan help</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function calculateArmyStrength() {
+            const infantry = parseInt(document.getElementById('infantryCount').value) || 0;
+            const cavalry = parseInt(document.getElementById('cavalryCount').value) || 0;
+
+            const attackPower = (infantry * 40) + (cavalry * 80);
+            const defensePower = (infantry * 35) + (cavalry * 40);
+
+            document.getElementById('armyResult').classList.remove('hidden');
+            document.getElementById('attackPower').textContent = attackPower.toLocaleString();
+            document.getElementById('defensePower').textContent = defensePower.toLocaleString();
+        }
+
+        function calculateTrainingTime() {
+            const units = parseInt(document.getElementById('unitCount').value) || 0;
+            const barracksLevel = parseInt(document.getElementById('barracksLevel').value) || 1;
+
+            const baseTime = units * 100; // Base 100 seconds per unit
+            const timeReduction = 1 + (barracksLevel * 0.05); // 5% reduction per level
+            const finalTime = Math.floor(baseTime / timeReduction);
+
+            const hours = Math.floor(finalTime / 3600);
+            const minutes = Math.floor((finalTime % 3600) / 60);
+            const seconds = finalTime % 60;
+
+            document.getElementById('trainingResult').classList.remove('hidden');
+            let timeStr = '';
+            if (hours > 0) timeStr += `${hours}h `;
+            if (minutes > 0) timeStr += `${minutes}m `;
+            timeStr += `${seconds}s`;
+
+            document.getElementById('trainingTime').textContent = timeStr;
+        }
+
+        function calculateProduction() {
+            const grain = (parseInt(document.getElementById('unitCount').value) || 0);
+            document.getElementById('productionResult').classList.remove('hidden');
+            document.getElementById('grainProd').textContent = (grain * 30).toLocaleString();
+            document.getElementById('stoneProd').textContent = (grain * 25).toLocaleString();
+            document.getElementById('woodProd').textContent = (grain * 40).toLocaleString();
+            document.getElementById('ironProd').textContent = (grain * 20).toLocaleString();
+        }
+
+        window.addEventListener('load', () => {
+            const cards = document.querySelectorAll('.strategy-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('fade-in');
+            });
+        });
+    </script>
+</body>
+</html>
